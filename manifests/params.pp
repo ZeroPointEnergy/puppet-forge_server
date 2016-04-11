@@ -15,4 +15,16 @@ class forge_server::params {
   $provider = 'gem'
   $scl_install_timeout = 300
   $scl_install_retries = 1
+  case $::osfamily {
+    'RedHat': {
+      if versioncmp($::operatingsystemmajrelease, '7') >= 0 {
+        $service_provider = 'systemd'
+      } else {
+        $service_provider = 'init'
+      }
+    }
+    default: {
+      $service_provider = 'init'
+    }
+  }
 }

@@ -44,6 +44,17 @@ describe 'forge_server' do
     }
   end
 
+  context 'with service_provider => systemd' do
+    let(:params) { {
+      :service_provider  => 'systemd'
+    } }
+
+    it { should compile.with_all_deps }
+    it {
+      should contain_file('/etc/systemd/system/puppet-forge-server.service').with_content(/ExecStart=/)
+    }
+  end
+
   context 'with service_refresh => false' do
     let(:params) { {
       :service_refresh  => false

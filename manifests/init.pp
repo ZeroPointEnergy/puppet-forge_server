@@ -16,6 +16,9 @@
 # [*scl_install_retries*]
 #   If using ruby scl, the number of retries allowed if gem installation fails
 #
+# [*service_provider*]
+#   Service provider to use
+#
 # [*service_enable*]
 #   Boolean if service should be enabled on boot
 #
@@ -71,6 +74,7 @@ class forge_server (
   $scl                 = undef,
   $scl_install_timeout = $::forge_server::params::scl_install_timeout,
   $scl_install_retries = $::forge_server::params::scl_install_retries,
+  $service_provider    = $::forge_server::params::service_provider,
   $service_enable      = true,
   $service_ensure      = 'running',
   $service_refresh     = true,

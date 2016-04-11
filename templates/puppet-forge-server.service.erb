@@ -1,0 +1,25 @@
+<%- params = [] -%>
+<%- params << "--pidfile \"#{@pidfile}\"" if @pidfile -%>
+<%- params << "--port #{@port}" if @port -%>
+<%- params << "--bind #{@bind_host}" if @bind_host -%>
+<%- params << "--daemonize" if @daemonize -%>
+<%- if @module_directory -%>
+  <%- [@module_directory].flatten.each do |md| -%>
+    <%- params << "--module-dir \"#{md}\"" -%>
+  <%- end -%>
+<%- end -%>
+<%- if @proxy -%>
+  <%- [@proxy].flatten.each do |pr| -%>
+    <%- params << "--proxy #{pr}" -%>
+  <%- end -%>
+<%- end -%>
+<%- params << "--cache-basedir \"#{@cache_basedir}\"" if @cache_basedir -%>
+<%- params << "--log-dir \"#{@log_dir}\"" if @log_dir -%>
+<%- params << "--debug" if @debug -%>
+
+[Unit]
+Description='Puppet Forge Server'
+
+[Service]
+User=forge
+ExecStart=/usr/local/bin/puppet-forge-server <%= params.join(' ') %>

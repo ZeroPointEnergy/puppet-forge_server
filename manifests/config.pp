@@ -18,20 +18,32 @@ class forge_server::config {
   $scl = $::forge_server::scl
   $provider = $::forge_server::provider
 
-  file { '/etc/default/puppet-forge-server':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template("${module_name}/puppet-forge-server.default.erb")
-  }
+  case $::forge_server::service_provider {
+    'systemd': {
+      file{'/etc/systemd/system/puppet-forge-server.service':
+        ensure  => present,
+        content => template("${module_name}/puppet-forge-server.service.erb"),
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+      }
+    }
+    default: {
+      file { '/etc/default/puppet-forge-server':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => template("${module_name}/puppet-forge-server.default.erb")
+      }
 
-  file { '/etc/init.d/puppet-forge-server':
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    content => template("${module_name}/puppet-forge-server.initd.erb")
+      file { '/etc/init.d/puppet-forge-server':
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0755',
+        content => template("${module_name}/puppet-forge-server.initd.erb")
+      }
+    }
   }
-
 }
